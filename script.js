@@ -44,3 +44,60 @@ function validateStats() {
     display.textContent = `Points remaining: ${remainingPoints}`;
   }
 }
+
+function updateItemSlots() {
+  const might = parseInt(document.getElementById("might").value) || 1;
+  const container = document.getElementById("item-slots");
+
+  // Backup current item values
+  const currentValues = Array.from(container.querySelectorAll("input")).map(input => input.value);
+
+  // Clear existing slots
+  container.innerHTML = "";
+
+  // Create new slots based on Might
+  for (let i = 0; i < might; i++) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = `Item ${i + 1}`;
+    input.value = currentValues[i] || ""; // Restore value if it exists
+    container.appendChild(input);
+    container.appendChild(document.createElement("br"));
+  }
+}
+
+
+function updateTalents() {
+  const container = document.getElementById("talents");
+  let talentValues = [];
+
+  // Backup current values
+  const currentInputs = container.querySelectorAll("input");
+  currentInputs.forEach((input, i) => {
+    talentValues[i] = input.value;
+  });
+
+  // Clear the container
+  container.innerHTML = "";
+
+  // Rebuild all saved talents
+  for (let i = 0; i < talentValues.length; i++) {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = `Talent ${i + 1}`;
+    input.value = talentValues[i] || "";
+    input.oninput = () => {
+      talentValues[i] = input.value;
+    };
+    container.appendChild(input);
+    container.appendChild(document.createElement("br"));
+  }
+}
+
+
+
+window.onload = function () {
+  validateStats();
+  updateItemSlots();
+  updateTalents();
+};
