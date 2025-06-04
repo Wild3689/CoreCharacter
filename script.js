@@ -70,6 +70,7 @@ function updateItemSlots() {
 function updateTalents() {
   const container = document.getElementById("talents");
   let talentValues = [];
+}
 
   // Backup current values
   const currentInputs = container.querySelectorAll("input");
@@ -80,24 +81,40 @@ function updateTalents() {
   // Clear the container
   container.innerHTML = "";
 
-  // Rebuild all saved talents
+function createTalentInput(index) {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = `Talent ${index + 1}`;
+  input.value = talentValues[index] || "";
+  input.oninput = () => {
+    talentValues[index] = input.value;
+  };
+  container.appendChild(input);
+  container.appendChild(document.createElement("br"));
+}
+
+// Rebuild all saved talents
+function updateTalents() {
   for (let i = 0; i < talentValues.length; i++) {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.placeholder = `Talent ${i + 1}`;
-    input.value = talentValues[i] || "";
-    input.oninput = () => {
-      talentValues[i] = input.value;
-    };
-    container.appendChild(input);
-    container.appendChild(document.createElement("br"));
+    createTalentInput(i);
   }
 }
 
+function backup() {
+  const storage = localStorage;
+  storage.setItem("charName", document.getElementById("charName"));
+}
 
+function loadLocal() {
+  const display = document.getElementByID("charName");
+  if (display) {
+    display.textContent = localStorage.getItem("charName");
+  }
+}
 
 window.onload = function () {
   validateStats();
   updateItemSlots();
   updateTalents();
+  loadLocal();
 };
